@@ -94,13 +94,14 @@ public class ApiHelper {
             @Override
             public void onResponse(Call<NovelApi.searchWrapper> call, Response<NovelApi.searchWrapper> response) {
                 if (response.isSuccessful()) {
-                    String bookNames = "";
-                    for (Book book: response.body().books) {
-                        bookNames += book.title + "\n";
-                    }
-                    //testTV.setText(bookNames);
-                    callback.onResult(bookNames);
-                    Log.d("debuggg", bookNames);
+//                    String bookNames = "";
+//                    for (Book book: response.body().books) {
+//                        bookNames += book.title + "\n";
+//                    }
+//                    //testTV.setText(bookNames);
+//                    callback.onResult(bookNames);
+//                    Log.d("debuggg", bookNames);
+                    callback.onResult(response.body().books);
                 } else {
                     Log.d("debuggg", response.code() + "");
                 }
