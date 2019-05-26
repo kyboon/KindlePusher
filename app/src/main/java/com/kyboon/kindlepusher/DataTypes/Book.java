@@ -24,4 +24,13 @@ public class Book {
         public int count;
         public float score;
     }
+
+    public String getLongIntro() {
+        String[] paragraphs = longIntro.split("\\s+\\s+");
+        String formattedIntro = "";
+        for(String paragraph: paragraphs) {
+            formattedIntro += "      " + paragraph + "\n";
+        }
+        return formattedIntro;
+    }
 }
