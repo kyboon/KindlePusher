@@ -17,8 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.BookstoreViewHolder> {
+    public interface IBookstoreAdapter {
+        void selectedBook(String id);
+    }
 
     List<Book> bookList = new ArrayList<>();
+    private IBookstoreAdapter callback;
 
     public static class BookstoreViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCover;
@@ -29,11 +33,13 @@ public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.Book
             super(view);
             ivCover = view.findViewById(R.id.ivBookCover);
             tvTitle = view.findViewById(R.id.tvBookTitle);
+            tvLastChapter = view.findViewById(R.id.tvLatestChapter);
+            tvLastUpdated = view.findViewById(R.id.tvLastUpdated);
         }
     }
 
-    public BookstoreAdapter() {
-
+    public BookstoreAdapter(IBookstoreAdapter callback) {
+        this.callback = callback;
     }
 
     public void setBookList(List<Book> bookList) {
@@ -50,10 +56,18 @@ public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.Book
 
     @Override
     public void onBindViewHolder(@NonNull BookstoreViewHolder bookshelfViewHolder, int i) {
-        Book book = bookList.get(i);
+        final Book book = bookList.get(i);
         bookshelfViewHolder.tvTitle.setText(book.title);
+        bookshelfViewHolder.tvLastChapter.setText(book.lastChapter);
+        //bookshelfViewHolder.tvLastUpdated.setText(book.updated.toString());
         Uri uri = Uri.parse(book.cover);
         Picasso.get().load(uri.getLastPathSegment()).into(bookshelfViewHolder.ivCover);
+        bookshelfViewHolder.tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.selectedBook(book.id);
+            }
+        });
     }
 
     @Override

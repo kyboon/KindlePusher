@@ -1,10 +1,13 @@
 package com.kyboon.kindlepusher;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.kyboon.kindlepusher.DataTypes.Book;
-import com.squareup.picasso.Picasso;
+import com.kyboon.kindlepusher.DataTypes.BookSource;
+import com.kyboon.kindlepusher.DataTypes.Chapter;
+import com.kyboon.kindlepusher.DataTypes.ChapterSource;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,10 +23,9 @@ interface ApiHelperCallback<T> {
 public class ApiHelper {
 
     private static ApiHelper instance;
-    Retrofit retrofit;
-    NovelApi novelApi;
+    private NovelApi novelApi;
 
-    public static ApiHelper getInstance() {
+    static ApiHelper getInstance() {
         if (instance == null)
             return new ApiHelper();
         else
@@ -31,7 +33,7 @@ public class ApiHelper {
     }
 
     private ApiHelper() {
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.zhuishushenqi.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -39,77 +41,106 @@ public class ApiHelper {
         novelApi = retrofit.create(NovelApi.class);
     }
 
-    public void getBook() {
-        Call<Book> call = novelApi.getBooks();
+    void getBookSource(String id, final ApiHelperCallback<List<BookSource>> callback) {
+        Call<List<BookSource>> call = novelApi.getBookSource("summary", id);
 
+        Log.v("ApiHelper", "Getting Book Source with id: " + id);
+        call.enqueue(new Callback<List<BookSource>>() {
+            @Override
+            public void onResponse(Call<List<BookSource>> call, Response<List<BookSource>> response) {
+                if (response.isSuccessful()) {
+                    callback.onResult(response.body());
+                } else {
+                    Log.w("ApiHelper", "getBookSource() Unsuccessful Response, Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BookSource>> call, Throwable t) {
+                Log.e("ApiHelper", "getBookSource() Error, Message: " + t.getMessage());
+            }
+        });
+    }
+
+    void getBook(String id, final ApiHelperCallback<Book> callback) {
+        Call<Book> call = novelApi.getBooks(id);
+
+        Log.v("ApiHelper", "Getting Book with id: " + id);
         call.enqueue(new Callback<Book>() {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if (response.isSuccessful()) {
-                    Log.d("debuggg", response.body().title + response.body().cover);
-                    if (response.body().cover != null) {
-                        Uri uri =Uri.parse(response.body().cover);
-                        Log.d("debuggg", uri.getLastPathSegment());
-                        //Picasso.get().load(uri.getLastPathSegment()).into(testIV);
-                    }
+                    callback.onResult(response.body());
                 } else {
-                    Log.d("debuggg", response.code() + "");
+                    Log.w("ApiHelper", "getBook() Unsuccessful Response, Code: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Book> call, Throwable t) {
-                Log.d("debuggg", t.getMessage());
+                Log.e("ApiHelper", "getBook() Error, Message: " + t.getMessage());
             }
         });
     }
 
-    public void getChapter(String link) {
+    void getChapter(String link, final ApiHelperCallback<Chapter> callback) {
         Call<NovelApi.ChapterWrapper> call = novelApi.getChapterWrapper(link);
 
+        Log.v("ApiHelper", "Getting Chapter with link: " + link);
         call.enqueue(new Callback<NovelApi.ChapterWrapper>() {
             @Override
             public void onResponse(Call<NovelApi.ChapterWrapper> call, Response<NovelApi.ChapterWrapper> response) {
-                if (response.isSuccessful()){
-
-                }
-                    //Log.d("debuggg", response.body().chapter.content);
-                    //testTV.setText(response.body().chapter.content);
-                else {
-                    Log.d("debuggg", response.code() + "");
+                if (response.isSuccessful() && response.body().ok){
+                    callback.onResult(response.body().chapter);
+                } else {
+                    Log.w("ApiHelper", "getChapter() Unsuccessful Response, Code: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<NovelApi.ChapterWrapper> call, Throwable t) {
-                Log.d("debuggg", t.getMessage());
+                Log.e("ApiHelper", "getChapter() Error, Message: " + t.getMessage());
             }
         });
     }
 
-    public void search(String query, final ApiHelperCallback callback) {
-        Call<NovelApi.searchWrapper> call = novelApi.search(query);
+    void getChapterSources(String bookSourceId, final ApiHelperCallback<List<ChapterSource>> callback) {
+        Call<NovelApi.ChapterSourceWrapper> call = novelApi.getChapterSource(bookSourceId);
 
-        call.enqueue(new Callback<NovelApi.searchWrapper>() {
+        Log.v("ApiHelper", "Getting Chapter Sources with Book Source Id: " + bookSourceId);
+        call.enqueue(new Callback<NovelApi.ChapterSourceWrapper>() {
             @Override
-            public void onResponse(Call<NovelApi.searchWrapper> call, Response<NovelApi.searchWrapper> response) {
-                if (response.isSuccessful()) {
-//                    String bookNames = "";
-//                    for (Book book: response.body().books) {
-//                        bookNames += book.title + "\n";
-//                    }
-//                    //testTV.setText(bookNames);
-//                    callback.onResult(bookNames);
-//                    Log.d("debuggg", bookNames);
-                    callback.onResult(response.body().books);
+            public void onResponse(Call<NovelApi.ChapterSourceWrapper> call, Response<NovelApi.ChapterSourceWrapper> response) {
+                if (response.isSuccessful()){
+                    callback.onResult(response.body().chapters);
                 } else {
-                    Log.d("debuggg", response.code() + "");
+                    Log.w("ApiHelper", "getChapterSources() Unsuccessful Response, Code: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<NovelApi.searchWrapper> call, Throwable t) {
-                Log.d("debuggg", t.getMessage());
+            public void onFailure(Call<NovelApi.ChapterSourceWrapper> call, Throwable t) {
+                Log.e("ApiHelper", "getChapterSources() Error, Message: " + t.getMessage());
+            }
+        });
+    }
+
+    void search(String query, final ApiHelperCallback<List<Book>> callback) {
+        Call<NovelApi.SearchWrapper> call = novelApi.search(query);
+
+        Log.v("ApiHelper", "Getting search result for: " + query);
+        call.enqueue(new Callback<NovelApi.SearchWrapper>() {
+            @Override
+            public void onResponse(Call<NovelApi.SearchWrapper> call, Response<NovelApi.SearchWrapper> response) {
+                if (response.isSuccessful()) {
+                    callback.onResult(response.body().books);
+                } else
+                    Log.w("ApiHelper", "search() Unsuccessful Response, Code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<NovelApi.SearchWrapper> call, Throwable t) {
+                Log.e("ApiHelper", "search() Error, Message: " + t.getMessage());
             }
         });
     }

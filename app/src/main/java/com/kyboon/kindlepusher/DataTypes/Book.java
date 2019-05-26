@@ -1,14 +1,27 @@
 package com.kyboon.kindlepusher.DataTypes;
 
-import java.util.Date;
+import com.google.gson.annotations.SerializedName;
 
 public class Book {
-    public int id;
+    @SerializedName("_id")
+    public String id;
     public String shortIntro;
     public String longIntro;
     public String author;
     public String title;
-    public Date updated;
+    public String updated;
     public String lastChapter;
     public String cover;
+    public int chaptersCount;
+    public Boolean isSerial;
+    public int wordCount;
+    public String majorCate;
+    public String majorCateV2;
+    public String minorCate;
+    public String minorCateV2;
+
+    class BookRating {
+        public int count;
+        public float score;
+    }
 }

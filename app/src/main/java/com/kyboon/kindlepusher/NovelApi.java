@@ -1,7 +1,10 @@
 package com.kyboon.kindlepusher;
 
+import com.google.gson.annotations.SerializedName;
 import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.Chapter;
+import com.kyboon.kindlepusher.DataTypes.BookSource;
+import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 
 import java.util.List;
 
@@ -11,16 +14,39 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NovelApi {
-    class searchWrapper {
+
+    // Search
+    class SearchWrapper {
         public List<Book> books;
         public int total;
     }
+
     @GET("book/fuzzy-search")
-    Call<searchWrapper> search(@Query("query") String query);
+    Call<SearchWrapper> search(@Query("query") String query);
 
-    @GET("book/548d9c17eb0337ee6df738f5")
-    Call<Book> getBooks();
+    // Book
+    @GET("book/{id}")
+    Call<Book> getBooks(@Path("id") String bookId);
 
+    // Book Source
+    @GET("atoc")
+    Call<List<BookSource>> getBookSource(@Query("view") String view, @Query("book") String bookId);
+
+    // Chapter Source
+    class ChapterSourceWrapper {
+        @SerializedName("id")
+        public String _id;
+        public String name;
+        @SerializedName("book")
+        public String bookId;
+        public String updated;
+        public List<ChapterSource> chapters;
+    }
+
+    @GET("atoc/{sourceId}?view=chapters")
+    Call<ChapterSourceWrapper> getChapterSource(@Path("sourceId") String sourceId);
+
+    // Chapter
     class ChapterWrapper {
         public boolean ok;
         public Chapter chapter;
@@ -28,5 +54,4 @@ public interface NovelApi {
 
     @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
     Call<ChapterWrapper> getChapterWrapper(@Path("link") String link);
-
 }
