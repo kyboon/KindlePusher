@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.BookstoreViewHolder> {
     public interface IBookstoreAdapter {
-        void selectedBook(String id);
+        void selectedBook(String id, View sharedImageView, View sharedTextView);
     }
 
     List<Book> bookList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.Book
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookstoreViewHolder bookshelfViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final BookstoreViewHolder bookshelfViewHolder, int i) {
         final Book book = bookList.get(i);
         bookshelfViewHolder.tvTitle.setText(book.title);
         bookshelfViewHolder.tvLastChapter.setText(book.lastChapter);
@@ -65,7 +65,7 @@ public class BookstoreAdapter extends RecyclerView.Adapter<BookstoreAdapter.Book
         bookshelfViewHolder.tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.selectedBook(book.id);
+                callback.selectedBook(book.id, bookshelfViewHolder.ivCover, bookshelfViewHolder.tvTitle);
             }
         });
     }

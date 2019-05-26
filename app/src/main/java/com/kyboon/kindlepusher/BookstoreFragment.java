@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.kyboon.kindlepusher.DataAdapters.BookstoreAdapter;
 import com.kyboon.kindlepusher.DataTypes.Book;
@@ -22,12 +27,14 @@ import java.util.List;
 
 public class BookstoreFragment extends Fragment implements BookstoreAdapter.IBookstoreAdapter {
     BookstoreAdapter bookstoreAdapter;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_bookstore, container, false);
 
+        progressBar = rootView.findViewById(R.id.progress_circular);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBookstore);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -55,46 +62,27 @@ public class BookstoreFragment extends Fragment implements BookstoreAdapter.IBoo
     }
 
     @Override
-    public void selectedBook(String id) {
-        Intent intent = new Intent(getContext(), BookSummaryActivity.class);
-        intent.putExtra("BOOK_ID", id);
-        startActivity(intent);
-//        ApiHelper.getInstance().getBook(id, new ApiHelperCallback<Book>() {
-//            @Override
-//            public void onResult(Book result) {
-//                Log.d("debuggg", result.title);
-//            }
-//
-//            @Override
-//            public void onError() {
-//
-//            }
-//        });
-//        ApiHelper.getInstance().getBookSource(id, new ApiHelperCallback<List<BookSource>>() {
-//            @Override
-//            public void onResult(List<BookSource> result) {
-//                for (BookSource bs: result) {
-//                    if (bs.starting == true) {
-//                        getChapS(bs._id);
-//                        break;
-//                    }
-//                }
-////                String link = null;
-////                try {
-////                    link = URLEncoder.encode(result.get(0).link, StandardCharsets.UTF_8.toString());
-////                    Log.d("debuggg", link);
-////                    ApiHelper.getInstance().getChapter(link);
-////                } catch (UnsupportedEncodingException e) {
-////                    e.printStackTrace();
-////                }
-////                ApiHelper.getInstance().getChapter("http://vip.zhuishushenqi.com/chapter/5817f1161bb2ca566b0a5973?cv=1481275033588");
-//            }
-//
-//            @Override
-//            public void onError() {
-//
-//            }
-//        });
+    public void selectedBook(String id, final View sharedImageView, final View sharedTextView) {
+        progressBar.setVisibility(View.VISIBLE);
+        ApiHelper.getInstance().getBook(id, new ApiHelperCallback<Book>() {
+            @Override
+            public void onResult(Book result) {
+                progressBar.setVisibility(View.GONE);
+                Intent intent = new Intent(getContext(), BookSummaryActivity.class);
+                intent.putExtra("BOOK", result);
+                Pair<View, String> p1 = Pair.create(sharedImageView, "cover");
+                Pair<View, String> p2 = Pair.create(sharedTextView, "title");
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(), p1, p2);
+
+                startActivity(intent, options.toBundle());
+            }
+
+            @Override
+            public void onError() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void getChapS(String sourceId) {

@@ -2,14 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:background="@color/white">
+    android:layout_height="120dp">
 
     <ImageView
         android:id="@+id/ivBookCover"
         android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
+        android:transitionName="cover"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,11 +17,11 @@
         android:id="@+id/tvBookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/fzyh_bold"
         android:text="Book Name"
-        android:textColor="@color/secondaryTextColor"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="@font/fzyh_bold"
+        android:transitionName="title"
         app:layout_constraintLeft_toRightOf="@id/ivBookCover"
         app:layout_constraintTop_toTopOf="@id/ivBookCover" />
 
@@ -29,10 +29,9 @@
         android:id="@+id/tvLatestChapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Latest Chapter"
-        android:textColor="@color/secondaryTextColor"
-        android:textSize="16sp"
         android:fontFamily="@font/fzyh_regular"
+        android:text="Latest Chapter"
+        android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/ivBookCover"
         app:layout_constraintTop_toBottomOf="@id/tvBookTitle" />
 
@@ -41,7 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Last Updated Time"
-        android:textColor="@color/secondaryTextColor"
         android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/ivBookCover"
         app:layout_constraintTop_toBottomOf="@id/tvLatestChapter" />
