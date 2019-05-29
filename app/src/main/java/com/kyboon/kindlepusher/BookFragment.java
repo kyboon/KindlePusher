@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,18 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import com.kyboon.kindlepusher.DataAdapters.BookstoreAdapter;
+import com.kyboon.kindlepusher.DataAdapters.BookAdapter;
 import com.kyboon.kindlepusher.DataTypes.Book;
-import com.kyboon.kindlepusher.DataTypes.BookSource;
 import com.kyboon.kindlepusher.DataTypes.Chapter;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 
 import java.util.List;
 
-public class BookstoreFragment extends Fragment implements BookstoreAdapter.IBookstoreAdapter {
-    BookstoreAdapter bookstoreAdapter;
+public class BookFragment extends Fragment implements BookAdapter.IBookAdapter {
+    BookAdapter bookAdapter;
     ProgressBar progressBar;
 
     @Nullable
@@ -38,8 +35,8 @@ public class BookstoreFragment extends Fragment implements BookstoreAdapter.IBoo
 
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBookstore);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        bookstoreAdapter = new BookstoreAdapter(this);
-        recyclerView.setAdapter(bookstoreAdapter);
+        bookAdapter = new BookAdapter(this, getContext());
+        recyclerView.setAdapter(bookAdapter);
 
         search();
 
@@ -51,7 +48,7 @@ public class BookstoreFragment extends Fragment implements BookstoreAdapter.IBoo
             @Override
             public void onResult(List<Book> result) {
                 Log.d("debuggg", "searched book");
-                bookstoreAdapter.setBookList(result);
+                bookAdapter.setBookList(result);
             }
 
             @Override
