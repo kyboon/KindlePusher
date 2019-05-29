@@ -41,7 +41,7 @@ import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +61,7 @@ public class BookSummaryActivity extends AppCompatActivity {
     private TextView tvDescription;
     private TextView tvLastUpdated;
 
+    private Button btnSort;
     private Spinner spinnerSource;
     private RecyclerView rvChapters;
     private ProgressBar progressBar;
@@ -92,13 +93,13 @@ public class BookSummaryActivity extends AppCompatActivity {
         fadeInView = findViewById(R.id.fadeInView);
         ivBookCover = findViewById(R.id.ivBookCover);
         btnAdd = findViewById(R.id.btnAdd);
-//        btnAdd = findViewById()
         tvBookTitle = findViewById(R.id.tvBookTitle);
         tvAuthor = findViewById(R.id.tvAuthor);
         tvCategory = findViewById(R.id.tvBookCategory);
         tvChapterCount = findViewById(R.id.tvChapterCount);
         tvDescription = findViewById(R.id.tvBookDescription);
         tvLastUpdated = findViewById(R.id.tvLastUpdated);
+        btnSort = findViewById(R.id.btnSort);
         spinnerSource = findViewById(R.id.spinnerSource);
         rvChapters = findViewById(R.id.rvChapters);
         progressBar = findViewById(R.id.progress_circular);
@@ -107,7 +108,12 @@ public class BookSummaryActivity extends AppCompatActivity {
         chapterAdapter = new ChapterAdapter(new ChapterAdapter.IChapterAdapter() {
             @Override
             public void selectedChapter(String id, String link) {
+                Log.d("debuggg", "selected Chapter: " + id);
+            }
 
+            @Override
+            public void longPressedChapter(String id, String link) {
+                Log.d("debuggg", "long pressed Chapter: " + id);
             }
         });
         rvChapters.setAdapter(chapterAdapter);
@@ -117,7 +123,12 @@ public class BookSummaryActivity extends AppCompatActivity {
             id = book.id;
             tvBookTitle.setText(book.title);
             tvAuthor.setText(book.author);
-            tvCategory.setText(book.majorCate);
+            String categoryString = "";
+            if (book.majorCateV2 != null)
+                categoryString = book.majorCateV2 + " ";
+            if (book.minorCateV2 != null)
+                categoryString += book.minorCateV2;
+            tvCategory.setText(categoryString);
             tvChapterCount.setText("Total Chapters: " + book.chaptersCount);
             tvDescription.setText(book.getLongIntro());
             String updatedString = "Last Updated: " + book.lastChapter + " at " + book.updated;
@@ -146,7 +157,16 @@ public class BookSummaryActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUpScrollViews();
+
+            }
+        });
+
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Boolean wasAscending = btnSort.getScaleY() == -1;
+                btnSort.setScaleY(wasAscending ? 1 : -1);
+                chapterAdapter.setAscending(!wasAscending);
             }
         });
 
@@ -157,16 +177,18 @@ public class BookSummaryActivity extends AppCompatActivity {
 
     private void setUpScrollViews() {
         Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int height = size.y;
+        Point windowSize = new Point();
+        display.getSize(windowSize);
+        int windowHeight = windowSize.y;
 
         final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
                 new int[]{android.R.attr.actionBarSize});
         final int actionBarSize = (int) (styledAttributes.getDimension(0, 0) / getResources().getDisplayMetrics().density);
         styledAttributes.recycle();
 
-        innerScrollView.getLayoutParams().height = height - actionBarSize - informationContainer.getHeight();
+        rvChapters.getLayoutParams().height = windowHeight - actionBarSize - informationContainer.getHeight();
+
+        innerScrollView.getLayoutParams().height = windowHeight - actionBarSize - informationContainer.getHeight();
 
         ViewTreeObserver.OnScrollChangedListener scrollListener = new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -184,11 +206,17 @@ public class BookSummaryActivity extends AppCompatActivity {
                     outerScrollView.setScrollingEnabled(true);
                 else
                     outerScrollView.setScrollingEnabled(false);
+
+                if (innerScrollView.getChildAt(0).getBottom() <= (innerScrollView.getHeight() + innerScrollView.getScrollY()))
+                    rvChapters.setNestedScrollingEnabled(true);
+                else
+                    rvChapters.setNestedScrollingEnabled(false);
             }
         };
 
         outerScrollView.getViewTreeObserver().addOnScrollChangedListener(scrollListener);
         innerScrollView.getViewTreeObserver().addOnScrollChangedListener(scrollListener);
+        rvChapters.getViewTreeObserver().addOnScrollChangedListener(scrollListener);
     }
 
     private void getSources() {

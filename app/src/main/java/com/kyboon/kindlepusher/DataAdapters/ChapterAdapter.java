@@ -16,16 +16,33 @@ import java.util.List;
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
     public interface IChapterAdapter {
         void selectedChapter(String id, String link);
+        void longPressedChapter(String id, String link);
     }
 
     List<ChapterSource> chapterList = new ArrayList<>();
     private IChapterAdapter callback;
+    private Boolean ascending = true;
 
     public static class ChapterViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
-        public ChapterViewHolder(View view) {
+        String id;
+        String link;
+        public ChapterViewHolder(View view, final IChapterAdapter callback) {
             super(view);
             tvTitle = view.findViewById(R.id.tvChapterTitle);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.selectedChapter(id, link);
+                }
+            });
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    callback.longPressedChapter(id, link);
+                    return true;
+                }
+            });
         }
     }
 
@@ -38,23 +55,24 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         notifyDataSetChanged();
     }
 
+    public void setAscending(Boolean ascending) {
+        this.ascending = ascending;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ChapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chapter, viewGroup, false);
-        return new ChapterViewHolder(view);
+        return new ChapterViewHolder(view, callback);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder chapterViewHolder, int i) {
-        final ChapterSource chapter = chapterList.get(i);
+        final ChapterSource chapter = chapterList.get(ascending ? i : chapterList.size() - i -1);
         chapterViewHolder.tvTitle.setText(chapter.title);
-        chapterViewHolder.tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.selectedChapter(chapter.id, chapter.link);
-            }
-        });
+        chapterViewHolder.id = chapter.id;
+        chapterViewHolder.link = chapter.link;
     }
 
     @Override
