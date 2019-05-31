@@ -17,7 +17,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/cardview_dark_background"
+        android:background="@color/primaryDarkColor"
         app:tabIndicatorColor="@color/secondaryDarkColor"
         app:tabSelectedTextColor="@color/secondaryColor"
         app:tabRippleColor="@color/secondaryLightColor"

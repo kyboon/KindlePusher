@@ -5,6 +5,7 @@ import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.Chapter;
 import com.kyboon.kindlepusher.DataTypes.BookSource;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
+import com.kyboon.kindlepusher.DataTypes.Ranking;
 
 import java.util.List;
 
@@ -54,4 +55,15 @@ public interface NovelApi {
 
     @GET("http://chapterup.zhuishushenqi.com/chapter/{link}")
     Call<ChapterWrapper> getChapterWrapper(@Path("link") String link);
+
+    // Ranking
+    class GeneralRankingWrapper {
+        public boolean ok;
+        public List<Ranking> rankings;
+    }
+
+    @GET("ranking")
+    Call<GeneralRankingWrapper> getGeneralRanking();
+
+
 }

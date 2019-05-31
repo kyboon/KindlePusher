@@ -22,7 +22,7 @@ import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 
 import java.util.List;
 
-public class BookFragment extends Fragment implements BookAdapter.IBookAdapter {
+public class BookStoreFragment extends Fragment implements BookAdapter.IBookAdapter {
     BookAdapter bookAdapter;
     ProgressBar progressBar;
 
@@ -38,22 +38,30 @@ public class BookFragment extends Fragment implements BookAdapter.IBookAdapter {
         bookAdapter = new BookAdapter(this, getContext());
         recyclerView.setAdapter(bookAdapter);
 
-        search();
-
         return rootView;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser && bookAdapter!=null && bookAdapter.getItemCount() == 0)
+            search();
+    }
+
     private void search() {
+        progressBar.setVisibility(View.VISIBLE);
         ApiHelper.getInstance().search("地下城", new ApiHelperCallback<List<Book>>() {
             @Override
             public void onResult(List<Book> result) {
+                progressBar.setVisibility(View.GONE);
                 Log.d("debuggg", "searched book");
                 bookAdapter.setBookList(result);
             }
 
             @Override
             public void onError() {
-
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

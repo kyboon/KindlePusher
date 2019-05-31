@@ -23,27 +23,26 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
-                if (i == 0)
-                    return new BookshelfFragment();
+                if (i == 2)
+                    return new BookStoreFragment();
                 else
-                    return new BookFragment();
+                    return new BookshelfFragment();
             }
 
             @Override
             public int getCount() {
-                return 2;
-            }
-
-            @Nullable
-            @Override
-            public CharSequence getPageTitle(int position) {
-                if (position == 0)
-                    return "bookshelf";
-                else
-                    return "bookstore";
+                return 5;
             }
         });
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(2);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_shelf);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_store);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_hot);
+        tabLayout.getTabAt(4).setIcon(R.drawable.ic_settings);
+        tabLayout.setTabIconTintResource(R.color.secondaryLightColor);
     }
 
     @Override
