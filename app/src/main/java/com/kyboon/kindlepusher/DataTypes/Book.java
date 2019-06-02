@@ -24,6 +24,7 @@ public class Book implements Parcelable {
     public int chaptersCount;
     public Boolean isSerial;
     public int wordCount;
+    public String cat;
     public String majorCate;
     public String majorCateV2;
     public String minorCate;
@@ -42,6 +43,7 @@ public class Book implements Parcelable {
         byte tmpIsSerial = in.readByte();
         isSerial = tmpIsSerial == 0 ? null : tmpIsSerial == 1;
         wordCount = in.readInt();
+        cat = in.readString();
         majorCate = in.readString();
         majorCateV2 = in.readString();
         minorCate = in.readString();
@@ -78,6 +80,7 @@ public class Book implements Parcelable {
         dest.writeInt(chaptersCount);
         dest.writeByte((byte) (isSerial == null ? 0 : isSerial ? 1 : 2));
         dest.writeInt(wordCount);
+        dest.writeString(cat);
         dest.writeString(majorCate);
         dest.writeString(majorCateV2);
         dest.writeString(minorCate);

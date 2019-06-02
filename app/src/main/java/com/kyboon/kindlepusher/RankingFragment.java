@@ -179,7 +179,7 @@ public class RankingFragment extends Fragment implements BookAdapter.IBookAdapte
             @Override
             public void onResult(List<Book> result) {
                 progressBar.setVisibility(View.GONE);
-                bookAdapter.setBookList(result);
+                bookAdapter.setBookList(result, BookAdapter.AdapterType.Ranking);
             }
 
             @Override

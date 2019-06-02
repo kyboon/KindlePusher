@@ -9,6 +9,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+    public enum AdapterType {
+        Search,
+        Ranking,
+        Shelf
+    }
     public interface IBookAdapter {
         void selectedBook(String id, View sharedImageView, View sharedTextView);
     }
@@ -31,20 +37,21 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     List<Book> bookList = new ArrayList<>();
     private IBookAdapter callback;
     private Context context;
+    private AdapterType adapterType = AdapterType.Shelf;
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView ivCover;
         TextView tvTitle;
-        TextView tvLastChapter;
-        TextView tvLastUpdated;
+        TextView tvSecondary;
+        TextView tvTertiary;
         public BookViewHolder(View view) {
             super(view);
             cardView = view.findViewById(R.id.card);
             ivCover = view.findViewById(R.id.ivBookCover);
             tvTitle = view.findViewById(R.id.tvBookTitle);
-            tvLastChapter = view.findViewById(R.id.tvLatestChapter);
-            tvLastUpdated = view.findViewById(R.id.tvLastUpdated);
+            tvSecondary = view.findViewById(R.id.tvSecondary);
+            tvTertiary = view.findViewById(R.id.tvTertiary);
         }
     }
 
@@ -53,8 +60,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         this.context = context;
     }
 
-    public void setBookList(List<Book> bookList) {
+    public void setBookList(List<Book> bookList, AdapterType adapterType) {
         this.bookList = bookList;
+        this.adapterType = adapterType;
         notifyDataSetChanged();
     }
 
@@ -69,7 +77,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public void onBindViewHolder(@NonNull final BookViewHolder bookViewHolder, int i) {
         final Book book = bookList.get(i);
         bookViewHolder.tvTitle.setText(book.title);
-        bookViewHolder.tvLastChapter.setText(book.lastChapter);
+        switch (adapterType) {
+            case Search:
+                bookViewHolder.tvSecondary.setText(book.cat + " | " + book.author);
+                bookViewHolder.tvTertiary.setText(book.shortIntro);
+                break;
+            case Shelf:
+                break;
+            case Ranking:
+                bookViewHolder.tvSecondary.setText(book.minorCate + " | " + book.author);
+                bookViewHolder.tvTertiary.setText(book.shortIntro);
+                break;
+        }
+
         Uri uri = Uri.parse(book.cover);
         Picasso.get().load(uri.getLastPathSegment()).resize(200, 200).into(bookViewHolder.ivCover, new Callback() {
             @Override

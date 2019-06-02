@@ -91,7 +91,7 @@ public class BookSummaryActivity extends AppCompatActivity {
         tvCategory = findViewById(R.id.tvBookCategory);
         tvChapterCount = findViewById(R.id.tvChapterCount);
         tvDescription = findViewById(R.id.tvBookDescription);
-        tvLastUpdated = findViewById(R.id.tvLastUpdated);
+        tvLastUpdated = findViewById(R.id.tvTertiary);
         btnSort = findViewById(R.id.btnSort);
         spinnerSource = findViewById(R.id.spinnerSource);
         rvChapters = findViewById(R.id.rvChapters);
