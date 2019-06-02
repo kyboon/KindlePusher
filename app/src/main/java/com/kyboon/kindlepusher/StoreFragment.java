@@ -22,18 +22,18 @@ import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 
 import java.util.List;
 
-public class BookStoreFragment extends Fragment implements BookAdapter.IBookAdapter {
+public class StoreFragment extends Fragment implements BookAdapter.IBookAdapter {
     BookAdapter bookAdapter;
     ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_bookstore, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_store, container, false);
 
         progressBar = rootView.findViewById(R.id.progress_circular);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.rvBookstore);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rvBook);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         bookAdapter = new BookAdapter(this, getContext());
         recyclerView.setAdapter(bookAdapter);

@@ -57,13 +57,16 @@ public interface NovelApi {
     Call<ChapterWrapper> getChapterWrapper(@Path("link") String link);
 
     // Ranking
-    class GeneralRankingWrapper {
+    class RankingsWrapper {
         public boolean ok;
-        public List<Ranking> rankings;
+        public List<Ranking> male;
+        public List<Ranking> female;
+        public List<Ranking> picture;
+        public List<Ranking> epub;
     }
 
-    @GET("ranking")
-    Call<GeneralRankingWrapper> getGeneralRanking();
+    @GET("ranking/gender")
+    Call<RankingsWrapper> getRankings();
 
 
 }

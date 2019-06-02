@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 interface ApiHelperCallback<T> {
     void onResult(T result);
+
     void onError();
 }
 
@@ -90,7 +91,7 @@ public class ApiHelper {
         call.enqueue(new Callback<NovelApi.ChapterWrapper>() {
             @Override
             public void onResponse(Call<NovelApi.ChapterWrapper> call, Response<NovelApi.ChapterWrapper> response) {
-                if (response.isSuccessful() && response.body().ok){
+                if (response.isSuccessful() && response.body().ok) {
                     callback.onResult(response.body().chapter);
                 } else {
                     Log.w("ApiHelper", "getChapter() Unsuccessful Response, Code: " + response.code());
@@ -111,7 +112,7 @@ public class ApiHelper {
         call.enqueue(new Callback<NovelApi.ChapterSourceWrapper>() {
             @Override
             public void onResponse(Call<NovelApi.ChapterSourceWrapper> call, Response<NovelApi.ChapterSourceWrapper> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callback.onResult(response.body().chapters);
                 } else {
                     Log.w("ApiHelper", "getChapterSources() Unsuccessful Response, Code: " + response.code());
@@ -143,5 +144,27 @@ public class ApiHelper {
                 Log.e("ApiHelper", "search() Error, Message: " + t.getMessage());
             }
         });
+    }
+
+    void getRankings(final ApiHelperCallback<NovelApi.RankingsWrapper> callback) {
+        Call<NovelApi.RankingsWrapper> call = novelApi.getRankings();
+
+        Log.v("ApiHelper", "Getting all rankings");
+        call.enqueue(new Callback<NovelApi.RankingsWrapper>() {
+            @Override
+            public void onResponse(Call<NovelApi.RankingsWrapper> call, Response<NovelApi.RankingsWrapper> response) {
+                if (response.isSuccessful()) {
+                    callback.onResult(response.body());
+                } else
+                    Log.w("ApiHelper", "getRankings() Unsuccessful Response, Code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<NovelApi.RankingsWrapper> call, Throwable t) {
+                Log.e("ApiHelper", "getRankings() Error, Message: " + t.getMessage());
+            }
+        });
+
+
     }
 }

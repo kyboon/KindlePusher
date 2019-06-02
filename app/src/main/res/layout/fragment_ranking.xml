@@ -9,34 +9,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true">
-                <android.support.design.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="hello"/>
-                <android.support.design.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="hello"/>
-            </android.support.design.chip.ChipGroup>
-        </HorizontalScrollView>
+        <android.support.design.chip.ChipGroup
+            android:id="@+id/chipGroupGender"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:singleLine="true"
+            app:singleSelection="true" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:scrollbars="none">
 
             <android.support.design.chip.ChipGroup
-                android:id="@+id/chipGroup2"
+                android:id="@+id/chipGroupRanking"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,21 +33,17 @@
                 app:singleSelection="true" />
         </HorizontalScrollView>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.chip.ChipGroup
-                android:id="@+id/chipGroup3"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true" />
-        </HorizontalScrollView>
+        <android.support.design.chip.ChipGroup
+            android:id="@+id/chipGroupTime"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:singleLine="true"
+            app:singleSelection="true" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvBookstore"
+            android:id="@+id/rvBook"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent" />

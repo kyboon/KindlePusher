@@ -1,6 +1,5 @@
 package com.kyboon.kindlepusher;
 
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -23,10 +22,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
-                if (i == 2)
-                    return new BookStoreFragment();
-                else
-                    return new BookshelfFragment();
+                switch (i) {
+                    case 2:
+                        return new StoreFragment();
+                    case 3:
+                        return new RankingFragment();
+                    default:
+                        return new BookshelfFragment();
+                }
             }
 
             @Override
