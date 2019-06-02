@@ -1,4 +1,4 @@
-package com.kyboon.kindlepusher.DataAdapters;
+package com.kyboon.kindlepusher.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +33,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private Context context;
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
         ImageView ivCover;
         TextView tvTitle;
         TextView tvLastChapter;
         TextView tvLastUpdated;
         public BookViewHolder(View view) {
             super(view);
+            cardView = view.findViewById(R.id.card);
             ivCover = view.findViewById(R.id.ivBookCover);
             tvTitle = view.findViewById(R.id.tvBookTitle);
             tvLastChapter = view.findViewById(R.id.tvLatestChapter);
@@ -83,7 +86,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
             }
         });
-        bookViewHolder.tvTitle.setOnClickListener(new View.OnClickListener() {
+        bookViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callback.selectedBook(book.id, bookViewHolder.ivCover, bookViewHolder.tvTitle);

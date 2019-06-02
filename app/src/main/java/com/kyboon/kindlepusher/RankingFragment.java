@@ -1,6 +1,5 @@
 package com.kyboon.kindlepusher;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.kyboon.kindlepusher.DataAdapters.BookAdapter;
+import com.kyboon.kindlepusher.Adapters.BookAdapter;
 import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.Ranking;
 

@@ -20,7 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,7 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.kyboon.kindlepusher.CustomUI.LockableScrollView;
-import com.kyboon.kindlepusher.DataAdapters.ChapterAdapter;
+import com.kyboon.kindlepusher.Adapters.ChapterAdapter;
 import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.BookSource;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
