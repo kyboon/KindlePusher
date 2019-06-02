@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_shelf);

@@ -164,7 +164,25 @@ public class ApiHelper {
                 Log.e("ApiHelper", "getRankings() Error, Message: " + t.getMessage());
             }
         });
+    }
 
+    void getRankingResult(String id, final ApiHelperCallback<List<Book>> callback) {
+        Call<NovelApi.RankingResultWrapper> call = novelApi.getRankingResults(id);
 
+        Log.v("ApiHelper", "Getting ranking results for: " + id);
+        call.enqueue(new Callback<NovelApi.RankingResultWrapper>() {
+            @Override
+            public void onResponse(Call<NovelApi.RankingResultWrapper> call, Response<NovelApi.RankingResultWrapper> response) {
+                if (response.isSuccessful()) {
+                    callback.onResult(response.body().ranking.books);
+                } else
+                    Log.w("ApiHelper", "getRankingResult() Unsuccessful Response, Code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<NovelApi.RankingResultWrapper> call, Throwable t) {
+                Log.e("ApiHelper", "getRankingResult() Error, Message: " + t.getMessage());
+            }
+        });
     }
 }

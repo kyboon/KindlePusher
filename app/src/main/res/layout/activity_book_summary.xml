@@ -37,12 +37,15 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/ContainerMainInformation" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnAdd"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/round_button_plus"
+                android:elevation="6dp"
+                android:src="@drawable/ic_library_add"
+                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/spacer"
                 app:layout_constraintRight_toRightOf="parent" />
 
@@ -151,12 +154,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnSort"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/ic_sort"
-                            android:scaleY="-1" />
+                            android:scaleY="-1"
+                            android:src="@drawable/ic_sort" />
                     </LinearLayout>
 
                     <RelativeLayout

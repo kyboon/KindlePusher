@@ -68,5 +68,11 @@ public interface NovelApi {
     @GET("ranking/gender")
     Call<RankingsWrapper> getRankings();
 
+    class RankingResultWrapper {
+        Ranking ranking;
+        Boolean ok;
+    }
+    @GET("ranking/{id}")
+    Call<RankingResultWrapper> getRankingResults(@Path("id") String rankingId);
 
 }

@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -46,7 +47,7 @@ public class BookSummaryActivity extends AppCompatActivity {
 
     private View fadeInView;
     private ImageView ivBookCover;
-    private Button btnAdd;
+    private ImageButton btnAdd;
     private TextView tvBookTitle;
     private TextView tvAuthor;
     private TextView tvCategory;
@@ -54,7 +55,7 @@ public class BookSummaryActivity extends AppCompatActivity {
     private TextView tvDescription;
     private TextView tvLastUpdated;
 
-    private Button btnSort;
+    private ImageButton btnSort;
     private Spinner spinnerSource;
     private RecyclerView rvChapters;
     private ProgressBar progressBar;
