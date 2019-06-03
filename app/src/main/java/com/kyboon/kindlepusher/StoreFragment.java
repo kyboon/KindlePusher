@@ -15,9 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.kyboon.kindlepusher.Adapters.BookAdapter;
+import com.kyboon.kindlepusher.ApiHelper;
+import com.kyboon.kindlepusher.ApiHelperCallback;
+import com.kyboon.kindlepusher.BookSummaryActivity;
 import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.Chapter;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
+import com.kyboon.kindlepusher.R;
 
 import java.util.List;
 

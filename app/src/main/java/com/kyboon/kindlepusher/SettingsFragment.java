@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.firebase.ui.auth.AuthUI;
+import com.kyboon.kindlepusher.R;
 
 public class SettingsFragment extends Fragment {
 
