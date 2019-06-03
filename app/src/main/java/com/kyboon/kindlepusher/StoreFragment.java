@@ -55,7 +55,6 @@ public class StoreFragment extends Fragment implements BookAdapter.IBookAdapter 
             @Override
             public void onResult(List<Book> result) {
                 progressBar.setVisibility(View.GONE);
-                Log.d("debuggg", "searched book");
                 bookAdapter.setBookList(result, BookAdapter.AdapterType.Search);
             }
 
@@ -98,7 +97,7 @@ public class StoreFragment extends Fragment implements BookAdapter.IBookAdapter 
                     ApiHelper.getInstance().getChapter(result.get(0).link, new ApiHelperCallback<Chapter>() {
                         @Override
                         public void onResult(Chapter result) {
-                            Log.d("debuggg", result.title);
+
                         }
 
                         @Override

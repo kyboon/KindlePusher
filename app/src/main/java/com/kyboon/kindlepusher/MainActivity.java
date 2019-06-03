@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore firebaseFirestore;
     private DocumentReference documentReference;
+    public static CollectionReference bookshelfReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private static final int RC_SIGN_IN = 666;
@@ -88,16 +90,18 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    documentReference = firebaseFirestore.collection("Users").document(user.getUid()).collection("Data").document("Bookshelf");
-//                    Map<String, Object> dataToStore = new HashMap<>();
-                    List<Bookmark> bookmarkList = new ArrayList<>();
-                    bookmarkList.add(new Bookmark("Help222","ididi324d"));
-                    bookmarkList.add(new Bookmark("Help5656","idid12341id2"));
-                    Bookshelf bookshelf = new Bookshelf();
-                    bookshelf.setBookmarks(bookmarkList);
-//                    dataToStore.put("Bookshelf", bookshelf);
-//                    documentReference.set(dataToStore);
-                    documentReference.set(bookshelf);
+//                    documentReference = firebaseFirestore.collection("Users").document(user.getUid()).collection("Data").document("Bookshelf");
+////                    Map<String, Object> dataToStore = new HashMap<>();
+//                    List<Bookmark> bookmarkList = new ArrayList<>();
+//                    bookmarkList.add(new Bookmark("Help222","ididi324d"));
+//                    bookmarkList.add(new Bookmark("Help5656","idid12341id2"));
+//                    Bookshelf bookshelf = new Bookshelf();
+//                    bookshelf.setBookmarks(bookmarkList);
+////                    dataToStore.put("Bookshelf", bookshelf);
+////                    documentReference.set(dataToStore);
+//                    documentReference.set(bookshelf);
+                    bookshelfReference = firebaseFirestore.collection("Users").document(user.getUid()).collection("Bookshelf");
+//                    saveBookmark(new Bookmark("Test1", "test2"));
                 } else {
                     documentReference = null;
                     startActivityForResult(
@@ -140,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         else
             viewPager.setCurrentItem(0);
+    }
+
+    private void saveBookmark(Bookmark bookmark) {
+        bookshelfReference.document().set(bookmark);
     }
 
 }

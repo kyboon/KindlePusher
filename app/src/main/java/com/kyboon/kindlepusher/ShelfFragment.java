@@ -11,18 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.kyboon.kindlepusher.Adapters.BookmarkAdapter;
 import com.kyboon.kindlepusher.DataTypes.Bookmark;
-import com.kyboon.kindlepusher.DataTypes.Bookshelf;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class ShelfFragment extends Fragment implements BookmarkAdapter.IBookmarkAdapter {
@@ -53,19 +44,16 @@ public class ShelfFragment extends Fragment implements BookmarkAdapter.IBookmark
     }
 
     private void getBookmarks() {
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("Data").document("Bookshelf");
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        BookmarkManager.getInstance().syncBookmarks(new BookmarkManagerCallback() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-//                    Bookshelf bookshelf = (Bookshelf) documentSnapshot.getData().get("Bookshelf");
-                    Bookshelf bookshelf = documentSnapshot.toObject(Bookshelf.class);
-//                    List<HashMap<String, String>> bookmarkList = (List<HashMap<String, String>>) documentSnapshot.getData().get("Bookmark");
-                    Log.d("debuggg", "" + bookshelf);
+            public void onSuccess() {
+                List<Bookmark> bookmarks = BookmarkManager.getInstance().getBookmarks();
+                bookmarkAdapter.setBookmarkList(bookmarks);
+            }
 
-//                    List<Bookmark> bookmarks = new ArrayList<>();
-                    bookmarkAdapter.setBookmarkList(bookshelf.getBookmarks());
-                }
+            @Override
+            public void onError() {
+
             }
         });
     }
