@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     case 3:
                         return new RankingFragment();
                     default:
-                        return new BookshelfFragment();
+                        return new ShelfFragment();
                 }
             }
 

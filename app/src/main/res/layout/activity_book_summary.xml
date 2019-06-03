@@ -19,6 +19,7 @@
                 android:layout_height="300dp"
                 android:src="@color/primaryLightColor"
                 android:transitionName="cover"
+                android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View

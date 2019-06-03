@@ -9,14 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class BookshelfFragment extends Fragment {
+public class ShelfFragment extends Fragment {
 
     RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_bookshelf, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_shelf, container, false);
         return rootView;
     }
 
