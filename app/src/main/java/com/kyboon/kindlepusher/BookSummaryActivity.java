@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -70,8 +71,8 @@ public class BookSummaryActivity extends AppCompatActivity {
         //supportPostponeEnterTransition();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setEnterTransition(new Explode());
-        getWindow().setExitTransition(new Explode());
+        getWindow().setEnterTransition(new Fade());
+        getWindow().setExitTransition(new Fade());
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getSupportActionBar().setTitle("");

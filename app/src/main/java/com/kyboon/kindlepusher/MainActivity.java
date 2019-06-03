@@ -10,21 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.kyboon.kindlepusher.DataTypes.Bookmark;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static CollectionReference bookshelfReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private static final int RC_SIGN_IN = 666;
@@ -163,9 +157,4 @@ public class MainActivity extends AppCompatActivity {
         else
             viewPager.setCurrentItem(0);
     }
-
-    private void saveBookmark(Bookmark bookmark) {
-        bookshelfReference.document().set(bookmark);
-    }
-
 }
