@@ -31,6 +31,7 @@ import com.kyboon.kindlepusher.CustomUI.LockableScrollView;
 import com.kyboon.kindlepusher.Adapters.ChapterAdapter;
 import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.BookSource;
+import com.kyboon.kindlepusher.DataTypes.Bookmark;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -111,7 +112,7 @@ public class BookSummaryActivity extends AppCompatActivity {
         });
         rvChapters.setAdapter(chapterAdapter);
 
-        Book book = getIntent().getParcelableExtra("BOOK");
+        final Book book = getIntent().getParcelableExtra("BOOK");
         if (book != null) {
             id = book.id;
             tvBookTitle.setText(book.title);
@@ -126,9 +127,9 @@ public class BookSummaryActivity extends AppCompatActivity {
             tvDescription.setText(book.getLongIntro());
             String updatedString = "Last Updated: " + book.lastChapter + " at " + book.updated;
             tvLastUpdated.setText(updatedString);
+            btnAdd.setSelected(!BookmarkManager.getInstance().isBookMarked(book.id));
 
             Uri uri = Uri.parse(book.cover);
-//            Picasso.get().load(uri.getLastPathSegment()).fit().into(ivBookCover);
             supportPostponeEnterTransition();
             Picasso.get().load(uri.getLastPathSegment())
                     .noFade()
@@ -150,7 +151,10 @@ public class BookSummaryActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (BookmarkManager.getInstance().isBookMarked(book.id))
+                    removeBook(book.id);
+                else
+                    addBook(book);
             }
         });
 
@@ -166,6 +170,34 @@ public class BookSummaryActivity extends AppCompatActivity {
         setUpScrollViews();
 
         getSources();
+    }
+
+    private void addBook(Book book) {
+        BookmarkManager.getInstance().addOrUpdateBookmark(new Bookmark(book.title, book.id, book.cover), new BookmarkManagerCallback() {
+            @Override
+            public void onSuccess() {
+                btnAdd.setSelected(false);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
+    private void removeBook(String id) {
+        BookmarkManager.getInstance().deleteBookmark(id, new BookmarkManagerCallback() {
+            @Override
+            public void onSuccess() {
+                btnAdd.setSelected(true);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     private void setUpScrollViews() {

@@ -45,7 +45,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/round_button_plus"
                 android:elevation="6dp"
-                android:src="@drawable/ic_library_add"
+                android:src="@drawable/add_remove_button"
                 android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/spacer"
                 app:layout_constraintRight_toRightOf="parent" />

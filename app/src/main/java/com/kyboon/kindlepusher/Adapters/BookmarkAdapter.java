@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder> {
     public interface IBookmarkAdapter {
-        void selectedBook(String id, View sharedImageView, View sharedTextView);
+        void selectedBookmark(String id, View sharedImageView, View sharedTextView);
     }
 
     List<Bookmark> bookmarks = new ArrayList<>();
@@ -91,7 +91,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         bookmarkViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.selectedBook(bookmark.bookId, bookmarkViewHolder.ivCover, bookmarkViewHolder.tvTitle);
+                callback.selectedBookmark(bookmark.bookId, bookmarkViewHolder.ivCover, bookmarkViewHolder.tvTitle);
             }
         });
     }

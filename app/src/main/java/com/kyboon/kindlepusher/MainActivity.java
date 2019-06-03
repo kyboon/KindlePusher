@@ -1,36 +1,29 @@
 package com.kyboon.kindlepusher;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.kyboon.kindlepusher.DataTypes.Book;
 import com.kyboon.kindlepusher.DataTypes.Bookmark;
-import com.kyboon.kindlepusher.DataTypes.Bookshelf;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseFirestore firebaseFirestore;
-    private DocumentReference documentReference;
     public static CollectionReference bookshelfReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -44,10 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
+        getSupportActionBar().hide();
 
-        firebaseFirestore.setFirestoreSettings(new FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build());
+        firebaseAuth = FirebaseAuth.getInstance();
 
         viewPager = findViewById(R.id.pager);
         tabLayout = findViewById(R.id.tabLayout);
@@ -76,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_shelf);
@@ -85,25 +77,51 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(4).setIcon(R.drawable.ic_settings);
         tabLayout.setTabIconTintResource(R.color.secondaryLightColor);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onPageSelected(int i) {
+                getSupportActionBar().setShowHideAnimationEnabled(false);
+                if (i == 0)
+                    getSupportActionBar().hide();
+                else
+                    getSupportActionBar().show();
+                switch (i) {
+                    case 1:
+                        setTitle("Bookshelf");
+                        break;
+                    case 2:
+                        setTitle("Bookstore");
+                        break;
+                    case 3:
+                        setTitle("Rankings");
+                        break;
+                    case 4:
+                        setTitle("Settings");
+                        break;
+                    default:
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-//                    documentReference = firebaseFirestore.collection("Users").document(user.getUid()).collection("Data").document("Bookshelf");
-////                    Map<String, Object> dataToStore = new HashMap<>();
-//                    List<Bookmark> bookmarkList = new ArrayList<>();
-//                    bookmarkList.add(new Bookmark("Help222","ididi324d"));
-//                    bookmarkList.add(new Bookmark("Help5656","idid12341id2"));
-//                    Bookshelf bookshelf = new Bookshelf();
-//                    bookshelf.setBookmarks(bookmarkList);
-////                    dataToStore.put("Bookshelf", bookshelf);
-////                    documentReference.set(dataToStore);
-//                    documentReference.set(bookshelf);
-                    bookshelfReference = firebaseFirestore.collection("Users").document(user.getUid()).collection("Bookshelf");
-//                    saveBookmark(new Bookmark("Test1", "test2"));
+
                 } else {
-                    documentReference = null;
+                    viewPager.setCurrentItem(0);
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()

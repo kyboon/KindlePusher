@@ -45,9 +45,18 @@ public class BookmarkManager {
         bookshelfReference = firebaseFirestore.collection("Users").document(userId).collection("Bookshelf");
     }
 
+    public boolean isBookMarked(String bookId) {
+        for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
+            if (entry.getValue().bookId.equals(bookId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addOrUpdateBookmark(Bookmark bookmark, BookmarkManagerCallback callback) {
         for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
-            if (entry.getValue().bookId == bookmark.bookId) {
+            if (entry.getValue().bookId.equals(bookmark.bookId)) {
                 updateBookmark(entry.getKey(), bookmark, callback);
                 return;
             }
@@ -55,8 +64,28 @@ public class BookmarkManager {
         addBookmark(bookmark, callback);
     }
 
-    private void updateBookmark(String id, Bookmark bookmark, BookmarkManagerCallback callback) {
-
+    private void updateBookmark(final String id, final Bookmark bookmark, final BookmarkManagerCallback callback) {
+        Log.v("BookmarkManager","Updating bookmark for book with id: " + bookmark.bookId);
+        bookshelfReference.document(id).set(bookmark).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    bookmarkHashMap.remove(id);
+                    bookmarkHashMap.put(id, bookmark);
+                    Log.v("BookmarkManager","Updated bookmark, id: " + id);
+                    callback.onSuccess();
+                } else {
+                    Log.w("BookmarkManager", "updateBookmark() task unsuccessful");
+                    callback.onError();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("BookmarkManager", "updateBookmark() Error: " + e.getMessage());
+                callback.onError();
+            }
+        });
     }
 
     private void addBookmark(final Bookmark bookmark, final BookmarkManagerCallback callback) {
@@ -78,6 +107,42 @@ public class BookmarkManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("BookmarkManager", "addBookmark() Error: " + e.getMessage());
+                callback.onError();
+            }
+        });
+    }
+
+    public void deleteBookmark(String bookId, final BookmarkManagerCallback callback) {
+        Log.v("BookmarkManager","Deleting bookmark for book with id: " + bookId);
+        String id = null;
+        for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
+            if (entry.getValue().bookId.equals(bookId)) {
+                id = entry.getKey();
+                break;
+            }
+        }
+        if (id == null) {
+            Log.w("BookmarkManager","deleteBookmark() failed: Bookmark doesn't exist");
+            callback.onError();
+            return;
+        }
+
+        final DocumentReference documentReference = bookshelfReference.document(id);
+        documentReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.v("BookmarkManager","Deleted bookmark, id: " + documentReference.getId());
+                    callback.onSuccess();
+                } else {
+                    Log.w("BookmarkManager", "deleteBookmark() task unsuccessful");
+                    callback.onError();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("BookmarkManager", "deleteBookmark() Error: " + e.getMessage());
                 callback.onError();
             }
         });

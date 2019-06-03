@@ -7,8 +7,15 @@ public class Bookmark {
     public String chapterTitle;
     public String chapterId;
     public Bookmark() {}
-    public Bookmark(String bookTitle, String bookId) {
+    public Bookmark(String bookTitle, String bookId, String cover) {
         this.bookTitle = bookTitle;
         this.bookId = bookId;
+        this.cover = cover;
+    }
+
+    public Bookmark setChapter(String chapterTitle, String chapterId) {
+        this.chapterId = chapterId;
+        this.chapterTitle = chapterTitle;
+        return this;
     }
 }
