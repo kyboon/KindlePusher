@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.kyboon.kindlepusher.MailSender.GmailSender;
+import com.kyboon.kindlepusher.MailSender.MailSender;
 
 public class HomeFragment extends Fragment {
 
@@ -23,11 +23,19 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                saveAndReadTxt();
             }
         });
         return rootView;
 
+    }
+
+    private void saveAndReadTxt() {
+//        String ster = "Test asduifghaduifg\n huiadshfuiasdhf\n\n hiasdufhuiasdfh";
+//        Log.d("debuggg", ster);
+//        FileHelper.getInstance().writeToFile(ster, getContext());
+//        ster = FileHelper.getInstance().readFromFile(getContext());
+//        Log.d("debuggg", ster);
     }
 
     private void sendMessage() {
@@ -39,7 +47,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    GmailSender sender = new GmailSender("//", "//");
+                    MailSender sender = new MailSender("//", "//");
                     sender.sendMail("EmailSender App",
                             "This is the message body",
                             "//",
