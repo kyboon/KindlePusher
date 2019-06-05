@@ -6,6 +6,7 @@ public class Bookmark {
     public String cover;
     public String chapterTitle;
     public String chapterId;
+    public String lastUpdated;
     public Bookmark() {}
     public Bookmark(String bookTitle, String bookId, String cover) {
         this.bookTitle = bookTitle;

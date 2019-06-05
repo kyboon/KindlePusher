@@ -22,6 +22,7 @@ import java.util.Map;
 
 interface BookmarkManagerCallback {
     void onSuccess();
+
     void onError();
 }
 
@@ -33,9 +34,8 @@ public class BookmarkManager {
 
     static BookmarkManager getInstance() {
         if (instance == null)
-            return new BookmarkManager();
-        else
-            return instance;
+            instance = new BookmarkManager();
+        return instance;
     }
 
     private BookmarkManager() {
@@ -46,7 +46,7 @@ public class BookmarkManager {
     }
 
     public boolean isBookMarked(String bookId) {
-        for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
+        for (Map.Entry<String, Bookmark> entry : bookmarkHashMap.entrySet()) {
             if (entry.getValue().bookId.equals(bookId)) {
                 return true;
             }
@@ -55,7 +55,7 @@ public class BookmarkManager {
     }
 
     public void addOrUpdateBookmark(Bookmark bookmark, BookmarkManagerCallback callback) {
-        for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
+        for (Map.Entry<String, Bookmark> entry : bookmarkHashMap.entrySet()) {
             if (entry.getValue().bookId.equals(bookmark.bookId)) {
                 updateBookmark(entry.getKey(), bookmark, callback);
                 return;
@@ -65,14 +65,14 @@ public class BookmarkManager {
     }
 
     private void updateBookmark(final String id, final Bookmark bookmark, final BookmarkManagerCallback callback) {
-        Log.v("BookmarkManager","Updating bookmark for book with id: " + bookmark.bookId);
+        Log.v("BookmarkManager", "Updating bookmark for book with id: " + bookmark.bookId);
         bookshelfReference.document(id).set(bookmark).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     bookmarkHashMap.remove(id);
                     bookmarkHashMap.put(id, bookmark);
-                    Log.v("BookmarkManager","Updated bookmark, id: " + id);
+                    Log.v("BookmarkManager", "Updated bookmark, id: " + id);
                     callback.onSuccess();
                 } else {
                     Log.w("BookmarkManager", "updateBookmark() task unsuccessful");
@@ -89,14 +89,14 @@ public class BookmarkManager {
     }
 
     private void addBookmark(final Bookmark bookmark, final BookmarkManagerCallback callback) {
-        Log.v("BookmarkManager","Adding bookmark for book with id: " + bookmark.bookId);
+        Log.v("BookmarkManager", "Adding bookmark for book with id: " + bookmark.bookId);
         final DocumentReference documentReference = bookshelfReference.document();
         documentReference.set(bookmark).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     bookmarkHashMap.put(documentReference.getId(), bookmark);
-                    Log.v("BookmarkManager","Added bookmark, id: " + documentReference.getId());
+                    Log.v("BookmarkManager", "Added bookmark, id: " + documentReference.getId());
                     callback.onSuccess();
                 } else {
                     Log.w("BookmarkManager", "addBookmark() task unsuccessful");
@@ -113,16 +113,16 @@ public class BookmarkManager {
     }
 
     public void deleteBookmark(String bookId, final BookmarkManagerCallback callback) {
-        Log.v("BookmarkManager","Deleting bookmark for book with id: " + bookId);
+        Log.v("BookmarkManager", "Deleting bookmark for book with id: " + bookId);
         String id = null;
-        for (Map.Entry<String, Bookmark> entry: bookmarkHashMap.entrySet()) {
+        for (Map.Entry<String, Bookmark> entry : bookmarkHashMap.entrySet()) {
             if (entry.getValue().bookId.equals(bookId)) {
                 id = entry.getKey();
                 break;
             }
         }
         if (id == null) {
-            Log.w("BookmarkManager","deleteBookmark() failed: Bookmark doesn't exist");
+            Log.w("BookmarkManager", "deleteBookmark() failed: Bookmark doesn't exist");
             callback.onError();
             return;
         }
@@ -132,7 +132,7 @@ public class BookmarkManager {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.v("BookmarkManager","Deleted bookmark, id: " + documentReference.getId());
+                    Log.v("BookmarkManager", "Deleted bookmark, id: " + documentReference.getId());
                     callback.onSuccess();
                 } else {
                     Log.w("BookmarkManager", "deleteBookmark() task unsuccessful");
@@ -150,7 +150,7 @@ public class BookmarkManager {
 
     public List<Bookmark> getBookmarks() {
         List<Bookmark> bookmarks = new ArrayList<>();
-        for (Bookmark bookmark: bookmarkHashMap.values()) {
+        for (Bookmark bookmark : bookmarkHashMap.values()) {
             bookmarks.add(bookmark);
         }
         return bookmarks;
@@ -163,7 +163,7 @@ public class BookmarkManager {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     bookmarkHashMap.clear();
-                    for (QueryDocumentSnapshot documentSnapshot: task.getResult()) {
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         bookmarkHashMap.put(documentSnapshot.getId(), documentSnapshot.toObject(Bookmark.class));
                     }
                     callback.onSuccess();

@@ -21,7 +21,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
     List<ChapterSource> chapterList = new ArrayList<>();
     private IChapterAdapter callback;
-    private Boolean ascending = true;
+    private boolean ascending = true;
 
     public static class ChapterViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
@@ -55,7 +55,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         notifyDataSetChanged();
     }
 
-    public void setAscending(Boolean ascending) {
+    public void setAscending(boolean ascending) {
         this.ascending = ascending;
         notifyDataSetChanged();
     }

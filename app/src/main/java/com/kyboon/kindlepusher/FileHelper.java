@@ -16,9 +16,8 @@ public class FileHelper {
 
     static FileHelper getInstance() {
         if (instance == null)
-            return new FileHelper();
-        else
-            return instance;
+            instance = new FileHelper();
+        return instance;
     }
 
     public void writeToFile(String filename, String data, Context context) {
@@ -38,21 +37,20 @@ public class FileHelper {
         try {
             InputStream inputStream = context.openFileInput(filename + ".txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString;
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append(receiveString + "\n");
                 }
 
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());

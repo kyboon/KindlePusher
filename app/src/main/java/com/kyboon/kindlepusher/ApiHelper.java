@@ -7,6 +7,7 @@ import com.kyboon.kindlepusher.DataTypes.BookSource;
 import com.kyboon.kindlepusher.DataTypes.Chapter;
 import com.kyboon.kindlepusher.DataTypes.ChapterSource;
 
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,9 +29,8 @@ public class ApiHelper {
 
     static ApiHelper getInstance() {
         if (instance == null)
-            return new ApiHelper();
-        else
-            return instance;
+            instance = new ApiHelper();
+        return instance;
     }
 
     private ApiHelper() {
@@ -113,6 +113,12 @@ public class ApiHelper {
             @Override
             public void onResponse(Call<NovelApi.ChapterSourceWrapper> call, Response<NovelApi.ChapterSourceWrapper> response) {
                 if (response.isSuccessful()) {
+                    response.body().chapters.sort(new Comparator<ChapterSource>() {
+                        @Override
+                        public int compare(ChapterSource o1, ChapterSource o2) {
+                            return o1.order - o2.order;
+                        }
+                    });
                     callback.onResult(response.body().chapters);
                 } else {
                     Log.w("ApiHelper", "getChapterSources() Unsuccessful Response, Code: " + response.code());
